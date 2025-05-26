@@ -61,11 +61,11 @@ export default function Home() {
   return (
     <Layout
       description={siteConfig.tagline}>
-      <HomepageHeader />
+      {/* <HomepageHeader /> */}
       <main>
         <HomepageFeatures />
 
-        <section className={styles.features}>
+        {/* <section className={styles.features}>
           <div className="container">
             <div className="row">
               <MoreAbout />
@@ -73,7 +73,7 @@ export default function Home() {
               <OtherNewsSources />
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
     </Layout>
   );

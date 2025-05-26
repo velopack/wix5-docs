@@ -19,28 +19,28 @@ const FeatureList = [
     linkText: 'Read more',
     href: '/docs/intro'
   },
-  {
-    title: 'Download',
-    Svg: DownloadSvg,
-    description: (
-      <>
-        You can download the WiX toolset for free.
-      </>
-    ),
-    linkText: 'Latest releases',
-    href: '/docs/intro'
-  },
-  {
-    title: 'Bugs',
-    Svg: BugSvg,
-    description: (
-      <>
-        If you find a bug, let us know so we can fix it.
-      </>
-    ),
-    linkText: 'File a bug',
-    href: '/docs/gethelp#bugs'
-  },
+  // {
+  //   title: 'Download',
+  //   Svg: DownloadSvg,
+  //   description: (
+  //     <>
+  //       You can download the WiX toolset for free.
+  //     </>
+  //   ),
+  //   linkText: 'Latest releases',
+  //   href: '/docs/intro'
+  // },
+  // {
+  //   title: 'Bugs',
+  //   Svg: BugSvg,
+  //   description: (
+  //     <>
+  //       If you find a bug, let us know so we can fix it.
+  //     </>
+  //   ),
+  //   linkText: 'File a bug',
+  //   href: '/docs/gethelp#bugs'
+  // },
 ];
 
 function Feature({Svg, title, description, linkText, href}) {
