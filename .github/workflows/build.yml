@@ -4,13 +4,16 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
   workflow_dispatch:
-    inputs:
-      tags:
-        manual: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 env:
   DOTNET_NOLOGO: true
@@ -22,6 +25,9 @@ jobs:
   build:
     name: Build
     runs-on: windows-2022
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,20 +40,36 @@ jobs:
 
       - name: Build wixweb
         shell: cmd
-        run: ./src/build.cmd release ${{ secrets.GITHUB_TOKEN }}
+        run: ./src/build.cmd
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/deploy/wwwroot
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # - name: Build wixweb
+      #   shell: cmd
+      #   run: ./src/build.cmd release ${{ secrets.GITHUB_TOKEN }}
 
       # Do NOT publish logs on `master` branch as they may contain secrets in them.
-      - name: Save logs
-        if: github.ref != 'refs/heads/master' && (success() || failure())
-        uses: actions/upload-artifact@v3
-        with:
-          name: logs_${{ github.run_id }}
-          path: build/logs/
+      # - name: Save logs
+      #   if: github.ref != 'refs/heads/master' && (success() || failure())
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: logs_${{ github.run_id }}
+      #     path: build/logs/
 
-      - name: Deploy
-        if: github.ref == 'refs/heads/master' && success()
-        uses: azure/webapps-deploy@v2
-        with:
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          app-name: wixtoolset
-          package: ./build/deploy
+      # - name: Deploy
+      #   if: github.ref == 'refs/heads/master' && success()
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
+      #     app-name: wixtoolset
+      #     package: ./build/deploy
